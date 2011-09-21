@@ -9,6 +9,30 @@
 <head><title>WeScheme</title>
 
 
+  <!-- Google Chrome Frame installation -->
+  <script type="text/javascript" 
+          src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+
+  <style>
+    /* 
+    CSS rules to use for styling the overlay:
+    .chromeFrameOverlayContent
+    .chromeFrameOverlayContent iframe
+    .chromeFrameOverlayCloseBar
+    .chromeFrameOverlayUnderlay
+    */
+  </style> 
+
+  <script>
+    // You may want to place these lines inside an onload handler
+    CFInstall.check({
+    mode: "overlay",
+    destination: "http://www.wescheme.org"
+    });
+  </script>
+
+
+
 <!-- Google analytics support -->
 <jsp:include page="/google-analytics.jsp"/>
 
