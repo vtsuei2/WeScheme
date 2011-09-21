@@ -8,13 +8,8 @@
 <html>
 <head><title>WeScheme</title>
   
-  <!-- Google Chrome Frame installation -->
-  <script type="text/javascript" 
-          src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
-
 
 <!-- Add compatibility libraries for IE. -->
-<jsp:include page="/js/compat/compat.jsp"/>
 
 
 <!-- Google analytics support -->
@@ -71,8 +66,13 @@
 
 <jsp:include page="/footer.jsp"/>
 
+
+
+  <!-- Google Chrome Frame installation -->
+  <script type="text/javascript" 
+          src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
   <script>
-    jQuery.ready(function() {    
+    $(document).ready(function() {    
         CFInstall.check({ mode: "overlay",
                           destination: "http://www.wescheme.org"
                         });
