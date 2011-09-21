@@ -7,40 +7,32 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head><title>WeScheme</title>
-
-
+  
   <!-- Google Chrome Frame installation -->
   <script type="text/javascript" 
           src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
-
-  <style>
-    /* 
-    CSS rules to use for styling the overlay:
-    .chromeFrameOverlayContent
-    .chromeFrameOverlayContent iframe
-    .chromeFrameOverlayCloseBar
-    .chromeFrameOverlayUnderlay
-    */
-  </style> 
-
-  <script>
-    // You may want to place these lines inside an onload handler
-    CFInstall.check({
-    mode: "overlay",
-    destination: "http://www.wescheme.org"
-    });
-  </script>
-
-
-
-<!-- Google analytics support -->
-<jsp:include page="/google-analytics.jsp"/>
 
 
 <!-- Add compatibility libraries for IE. -->
 <jsp:include page="/js/compat/compat.jsp"/>
 
+
+<!-- Google analytics support -->
+<jsp:include page="/google-analytics.jsp"/>
+
 <script src="/editor/jquery.js"></script>
+
+
+<style>
+  /* 
+  CSS rules to use for styling the overlay:
+  .chromeFrameOverlayContent
+  .chromeFrameOverlayContent iframe
+  .chromeFrameOverlayCloseBar
+  .chromeFrameOverlayUnderlay
+  */
+</style> 
+
 
 <link rel="stylesheet" type="text/css" href="css/splash.css" id="style" />
 
@@ -78,4 +70,13 @@
 
 
 <jsp:include page="/footer.jsp"/>
+
+  <script>
+    jQuery.ready(function() {    
+        CFInstall.check({ mode: "overlay",
+                          destination: "http://www.wescheme.org"
+                        });
+        });
+  </script>
+
 </body></html>
