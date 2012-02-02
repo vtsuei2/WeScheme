@@ -21,6 +21,10 @@ import com.google.appengine.api.datastore.Key;
 
 import org.wescheme.util.PMF;
 import org.wescheme.util.CacheHelpers;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Logger;
+
 
 
 @PersistenceCapable
@@ -40,7 +44,8 @@ import org.wescheme.util.CacheHelpers;
     @Persistent
 	private List<Schedule> schedules;
 
-	
+	private static Logger logger = Logger.getLogger(KeyScheduleList.class.getName());
+
     public Key getKey() { return this.key; }
 
 	
@@ -61,10 +66,10 @@ import org.wescheme.util.CacheHelpers;
      */
     @SuppressWarnings("unchecked")
 	public static KeyScheduleList getInstance() {		
-        KeyScheduleList ksFromCache = getKeyScheduleFromCache();
-        if (ksFromCache != null) {
-            return ksFromCache;
-        }
+    	KeyScheduleList ksFromCache = getKeyScheduleFromCache();
+    	if (ksFromCache != null) {
+    		return ksFromCache;
+    	}
 
         // If we still can't find the schedule, create it from scratch.
         PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -109,6 +114,8 @@ import org.wescheme.util.CacheHelpers;
         // If it's not there, try looking at it in the database.
         // Defensive coding: if we see more than one keySchedule, delete the
         // others.  There should only be one singleton instance in our database.
+
+        // Similarly, the only Schedules in the store should be the ones associated to the KeyScheduleList.
         Extent<KeyScheduleList> extent = pm.getExtent(KeyScheduleList.class);
         KeyScheduleList result = null;
         try {
@@ -122,9 +129,38 @@ import org.wescheme.util.CacheHelpers;
         } finally {
             extent.closeAll();
         }
+        if (result != null) {
+            clearOtherSchedules(pm, result.schedules);
+        }
         return result;
     }
-	
+
+    // This is meant to clear out Schedules that aren't a part of the
+    // singleton.
+    private static void clearOtherSchedules(PersistenceManager pm, 
+                                            List<Schedule> excluding) {
+    	int LIMIT = 5000;
+    	int i = 0;
+    	Set<Key> excludingKeys = new HashSet<Key>();
+        for (Schedule s : excluding) {
+            excludingKeys.add(s.key);
+        }
+ 
+        Extent<Schedule>extent = pm.getExtent(Schedule.class);
+        try {
+            for (Schedule s : extent) {
+            	if (i > LIMIT) { break; }
+            	if (! (excludingKeys.contains(s.key))) {
+                	logger.info("Deleting unused schedule " + s.key);
+                	pm.deletePersistent(s);
+                }
+                i++;
+            }
+        } finally {
+            extent.closeAll();
+        }
+    }
+
 	
     public void clockTick() throws CacheException {
         PersistenceManager pm = PMF.get().getPersistenceManager();
