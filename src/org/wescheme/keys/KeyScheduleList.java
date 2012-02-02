@@ -126,8 +126,6 @@ import org.wescheme.util.CacheHelpers;
     }
 	
 	
-	
-	
     public void clockTick() throws CacheException {
         PersistenceManager pm = PMF.get().getPersistenceManager();
         CacheFactory cf = CacheManager.getInstance().getCacheFactory();
