@@ -14,16 +14,14 @@ goog.require("plt.wescheme.browserCheck");
 // loadProgramList: (-> void) -> void
 // Load up the program list and fill the document with it.
 // Calls the continuation if the load is successful.
-var loadProgramList = function(k) {
+var loadProgramList = function(onSuccess, onFail) {
     var actions = new plt.wescheme.AjaxActions();
-
     actions.listProjects(
 	// On successful project list loading, load the list
 	function(dom) {
 	    var programListUl = clearConsoleListing();	
 	    dom.find("ProgramDigest").each(function() {	
-		var digest = jQuery(this);
-		
+		var digest = jQuery(this);		
 
 		if (digest.children("published").text() == 'true') {
 		    // skip it
@@ -33,17 +31,18 @@ var loadProgramList = function(k) {
 				    programListUl);
 		}
 	    });
-	    
-	    if (typeof(k) === 'function') { k(); }
-	},
-        
+	    if (typeof(onSuccess) === 'function') { onSuccess(); }
+	},        
+
 	// Otherwise, fail by raising an alert.
 	function() {
-	    alert("Could not load list of projects")
+            if (typeof(onFail) === 'function') { 
+                onFail(); 
+            } else { 
+                alert("Could not load list of projects");
+            }
 	});
-}
-
-
+};
 
 
 
@@ -66,8 +65,8 @@ var clearConsoleListing = function() {
 	    .append(jQuery("<span/>").addClass("ProgramModified").text("Last Modified (D/M/YYYY)"))
 	    .append(jQuery("<span/>").addClass("ProgramPublished").text("Share"))
 	    .append(jQuery("<span/>").addClass("ProgramDelete").text("Delete")));
-    return programListUl
-}
+    return programListUl;
+};
 
 
 
