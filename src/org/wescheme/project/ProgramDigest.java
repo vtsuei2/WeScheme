@@ -16,8 +16,10 @@ public class ProgramDigest {
 	Element root = new Element("ProgramDigest");
 		
 		root.addContent(XML.makeElement("id", program.getId()));		
-		if(program.getPublicId() != null)
+		if(program.getPublicId() != null) {
 			root.addContent(XML.makeElement("publicId", program.getPublicId()));
+		}
+		root.addContent(XML.makeElement("revision", program.getRevision()));
 		root.addContent(XML.makeElement("title", program.getTitle()));
 		root.addContent(XML.makeElement("owner", program.getOwner()));
 		root.addContent(XML.makeElement("author", program.getAuthor()));
@@ -29,6 +31,7 @@ public class ProgramDigest {
 			if (p.getPublicId() != null) {
 				Element shared = new Element("Entry");
 				shared.addContent(XML.makeElement("publicId", p.getPublicId()));
+				shared.addContent(XML.makeElement("revision", p.getRevision()));
 				shared.addContent(XML.makeElement("title", p.getTitle()));
 				shared.addContent(XML.makeElement("modified", p.getTime()));
 				sharedAsElt.addContent(shared);

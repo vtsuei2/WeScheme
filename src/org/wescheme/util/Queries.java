@@ -53,14 +53,32 @@ public class Queries {
 	
 	@SuppressWarnings("unchecked")
 	/**
-	 * Returns the unique program with the given public id.  If no such unique program exists, returns null.
+	 * Returns the program with the given public id with the highest revision id.
+	 * If no such unique program exists, returns null.
 	 */
 	public static Program getProgramByPublicId(PersistenceManager pm, String publicId) {
 		javax.jdo.Query query = pm.newQuery(Program.class);
 		query.setFilter("publicId_ == param");
 		query.declareParameters("String param");
+		query.setOrdering("revision desc");
 		try {
 			List<Program> programs = (List<Program>) query.execute(publicId);
+			if (programs.size() > 0) {
+				return programs.get(0);
+			} else {
+				return null;
+			}
+		} finally { 
+			query.closeAll();
+		}		
+	}
+
+	public static Program getProgramByPublicIdAndRevision(PersistenceManager pm, String publicId, int revision) {
+		javax.jdo.Query query = pm.newQuery(Program.class);
+		query.setFilter("publicId_ == pid && revision == rev");
+		query.declareParameters("String pid, int rev");
+		try {
+			List<Program> programs = (List<Program>) query.execute(publicId, revision);
 			if (programs.size() == 1) {
 				return programs.get(0);
 			} else {
@@ -71,4 +89,5 @@ public class Queries {
 		}		
 	}
 
+	
 }

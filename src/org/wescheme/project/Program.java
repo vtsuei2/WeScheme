@@ -36,6 +36,12 @@ public class Program implements Serializable {
 	protected String publicId_;
 
 	@Persistent
+	protected Integer revision;
+
+	// The combination of publicId and revision should be unique.
+	
+	
+	@Persistent
 	protected String title_;
 	@Persistent
 	protected ObjectCode obj_;
@@ -70,6 +76,7 @@ public class Program implements Serializable {
 	private void updateTime(){
 		time_ = System.currentTimeMillis();
 		this.markOwnerCacheDirty();
+		this.setRevision(this.getRevision() + 1);
 	}
 
 	
@@ -122,6 +129,18 @@ public class Program implements Serializable {
 	}
 
 
+	public int getRevision() {
+		if (this.revision == null) {
+			this.revision = 1;
+		}
+		return this.revision;
+	}
+	
+	public void setRevision(int n) {
+		this.revision = n;
+	}
+	
+	
 	public boolean getIsDeleted() {
 		if (this.isDeleted == null) {
 			return false;
@@ -235,6 +254,7 @@ public class Program implements Serializable {
 		}
 		root.addContent(XML.makeElement("id", id));
 		if (publicId_ != null) { root.addContent(XML.makeElement("publicId", publicId_)); }
+		root.addContent(XML.makeElement("revision", this.getRevision()));
 		root.addContent(XML.makeElement("isSourcePublic", this.getIsSourcePublic()));
 		root.addContent(XML.makeElement("title", getTitle()));
 		root.addContent(XML.makeElement("owner", owner_));
@@ -247,6 +267,7 @@ public class Program implements Serializable {
 			if (p.getPublicId() != null) {
 				Element shared = new Element("Entry");
 				shared.addContent(XML.makeElement("publicId", p.getPublicId()));
+				shared.addContent(XML.makeElement("revision",  p.getRevision()));
 				shared.addContent(XML.makeElement("title", p.getTitle()));
 				shared.addContent(XML.makeElement("modified", p.getTime()));
 				sharedAsElt.addContent(shared);
