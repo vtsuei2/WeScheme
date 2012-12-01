@@ -62,8 +62,15 @@ public class SaveREPLServlet extends HttpServlet {
     	PersistenceManager pm = PMF.get().getPersistenceManager();
         SessionManager sm = new SessionManager();
     	
+        Long pid = null;
+        try {
+        	pid = Long.parseLong(req.getParameter("programID"));
+        }  catch  (NumberFormatException nfe) { }
+        if (pid == null) {
+        	resp.setContentType("text/json");
+            resp.getWriter().print("{'status':'0'}");
+        }
         
-    	Long pid = Long.parseLong(req.getParameter("programID"));
     	String command = req.getParameter("data");
     	long time = System.currentTimeMillis(); //TODO: Figure this out
     	
