@@ -424,40 +424,10 @@ WeSchemeInteractions = (function () {
                             }
                           }
                           
-                          //	jQuery(elem).css("height",document.height);
-                          //jQuery(elem).css("width",document.width);
                         }
                       
- //                       var elem = document.querySelector(document.webkitExitFullscreen ? "#fs" : "#fs-container");
-
- //                       document.addEventListener('keydown', function(e) {
- //                       switch (e.keyCode) {
- //                           case 13: // ENTER. ESC should also take you out of fullscreen by default.
-//                              e.preventDefault();
-//                              document.cancelFullScreen(); // explicitly go out of fs.
-//                              alert("cancelled full screen");
-//                            break;
-//                            case 70: // f
-//                              enterFullscreen();
-//                            break;
- //                           }
-//                            }, false);
-
-                        
-//                        jQuery(document).bind('mozfullscreenchange', function() {alert('mozfullscreenchange')});
-//                        jQuery(document).bind('fullscreenchange', function() {alert('fullscreenchange')});
-//                        jQuery(document).bind('webkitfullscreenchange', function() {alert('webkitfullscreenchange')});
-                        
-                        //jQuery(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange',alert("hello"));
-                        
-                        //elem.height = document.height;
-                        //elem.width = document.width;
                         });
-                    /*jQuery(dialog).resize(function doResize(evt) {
-                        console.log(evt);
-                        innerArea.childNodes[0].width = dialog.innerWidth;
-                        innerArea.childNodes[0].height = dialog.innerHeight;
-                    }, false);*/
+
                     return innerArea.get(0);
                 };
             evaluator.setImageProxy("/imageProxy");
