@@ -74,6 +74,9 @@ public class Program implements Serializable {
 	@Persistent
 	private Text notes;
 	
+	@Persistent
+	protected List<String> history;
+	
 
 	private void updateTime(){
 		time_ = System.currentTimeMillis();
@@ -282,6 +285,7 @@ public class Program implements Serializable {
         json.put("modified", this.time_);
         json.put("published", this.published_);
         json.put("notes", this.getNotes());
+        json.put("history", this.history);
         JSONArray sharedAs = new JSONArray();
         for(Program p : this.getBacklinkedPrograms(pm)) {
             if (p.getPublicId() != null) {
