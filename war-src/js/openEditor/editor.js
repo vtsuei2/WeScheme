@@ -441,6 +441,12 @@ var WeSchemeEditor;
 	    } else {
 		that._setIsOwner(false);
 	    }
+	    for (var historyEntry in aProgram.json.history) {
+	      myEditor.interactions.prompt.historyArray.push(aProgram.json.history[historyEntry][0]);
+	    }
+	    myEditor.interactions.prompt.historyArray.push("");
+	    myEditor.interactions.prompt.historyIndex = myEditor.interactions.prompt.historyArray.length;
+	    
 	    that.loadedE.sendEvent(true);
 	    that.isPublishedE.sendEvent(aProgram.isPublished());
 	    plt.wescheme.WeSchemeIntentBus.notify("after-load", that);

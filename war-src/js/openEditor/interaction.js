@@ -117,24 +117,7 @@ WeSchemeInteractions = (function () {
               extraKeys: {
                   "Enter":function (ed) {
                       if (that.hasCompleteExpression()) {
-                    	  
-                    		// XXX: we are hijacking this to pass the request -roughnecks
-                    		
-                    		jQuery.ajax({cache: false,
-                   		     data: {
-                   		      'data' :that.textContainer.getCode(),
-                   		      'programID' : myEditor.pid
-                   		     },
-                   		     dataType: "json",
-                   		     type: "POST",
-                   		     url: "/saveREPL",
-                   		     success: that.onEvaluation(),
-                   		     error: function(xhr) {
-                   		    	 alert("Error saving REPL: " + xhr.statusText);
-                   		     }
-                   		    });
-                    	  
-                          
+                    		that.onSubmit();
                       } else {
                           CodeMirror.commands.newlineAndIndent(ed);
                       }
@@ -150,6 +133,9 @@ WeSchemeInteractions = (function () {
                   },
                   "Alt-P":function (ed) {
                       that.onHistoryPrevious();
+                  },
+                  "Shift-Enter":function(ed) {
+                      that.onSubmit();
                   }
               }},
             function(container) {
@@ -160,6 +146,24 @@ WeSchemeInteractions = (function () {
                 }
             });
     };
+
+    // XXX: we are hijacking this to pass the request -roughnecks
+    Prompt.prototype.onSubmit = function() {
+      var that = this;
+      jQuery.ajax({cache: false,
+          data: {
+            'data' :that.textContainer.getCode(),
+            'programID' : myEditor.pid
+    	     },
+           dataType: "json",
+           type: "POST",
+           url: "/saveREPL",
+           success: that.onEvaluation(),
+           error: function(xhr) {
+            alert("Error saving REPL: " + xhr.statusText);
+           }
+       });
+    }
 
     Prompt.prototype.onEvaluation = function() {
         this.saveHistoryWithCleanup();
