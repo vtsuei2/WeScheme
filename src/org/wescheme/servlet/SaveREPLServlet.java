@@ -67,8 +67,9 @@ public class SaveREPLServlet extends HttpServlet {
         	pid = Long.parseLong(req.getParameter("programID"));
         }  catch  (NumberFormatException nfe) { }
         if (pid == null) {
-        	resp.setContentType("text/json");
+            resp.setContentType("text/json");
             resp.getWriter().print("{'status':'0'}");
+            return;
         }
         
     	String command = req.getParameter("data");
