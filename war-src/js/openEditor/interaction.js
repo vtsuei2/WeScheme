@@ -107,6 +107,7 @@ WeSchemeInteractions = (function () {
         parentDiv.append(this.div);
 
         var innerDivElt = this.div.find("span").get(1);
+        console.log(innerDivElt);
         new plt.wescheme.WeSchemeTextContainer(
             innerDivElt,
             { dynamicHeight: true,
@@ -363,7 +364,20 @@ WeSchemeInteractions = (function () {
 
         var evaluator = new Evaluator({
             write: function(thing) {
-                that.addToInteractions(thing);
+                 if (thing.tagName && thing.tagName == 'SPAN') {
+                   var d = document.createElement('textarea');
+                   d.value = thing.textContent;
+                   d.innerHTML = thing.textContent;
+                   that.addToInteractions(d);
+                   var editor = CodeMirror.fromTextArea(d, {
+                       readOnly: "true",
+                       mode: "scheme2",
+                       dynamicHeight: true,
+                       lineNumbers: false,
+                       theme: "scheme-interactive"
+                   });
+                 } else 
+                   that.addToInteractions(thing);
             },
             transformDom : function(dom) {
                 var result = that._transformDom(dom);
@@ -390,25 +404,60 @@ WeSchemeInteractions = (function () {
                         closeOnEscape: true
                     });
 
-                    var innerArea = jQuery("<div class='evaluatorToplevelNode'></div>");
+                    var innerArea = jQuery("<div id='innerAreaId' class='evaluatorToplevelNode'></div>");
                     dialog.append(innerArea);
                     dialog.dialog("open");
                     dialog.dblclick(function (evt){
-                                      console.log(evt);
-                                      var elem = evt.target;
-                                      console.log(evt.target);
-                                      console.log(elem);
-                                      console.log("enterFullscreen()");
-                                      if (elem.webkitRequestFullscreen) {
-                                          elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-                                      } else {
-                                              if (elem.mozRequestFullScreen) {
-                                                  elem.mozRequestFullScreen();
-                                              } else {
-                                                     elem.requestFullscreen();
-                                                     }
-                                      }}
-                                     );
+                      //  console.log(evt);
+                        var elem = evt.target;
+                        
+                        document.cancelFullScreen = document.webkitExitFullscreen || document.mozCancelFullScreen || document.exitFullscreen;
+                        
+                        if (document.fullScreen != true && document.webkitIsFullScreen != true && document.mozfullScreen != true) {
+                            if (elem.webkitRequestFullscreen) {
+                                elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                            } else {
+                            if (elem.mozRequestFullScreen) {
+                                elem.mozRequestFullScreen();
+                            } else {
+                                elem.requestFullscreen();
+                            }
+                          }
+                          
+                          //	jQuery(elem).css("height",document.height);
+                          //jQuery(elem).css("width",document.width);
+                        }
+                      
+ //                       var elem = document.querySelector(document.webkitExitFullscreen ? "#fs" : "#fs-container");
+
+ //                       document.addEventListener('keydown', function(e) {
+ //                       switch (e.keyCode) {
+ //                           case 13: // ENTER. ESC should also take you out of fullscreen by default.
+//                              e.preventDefault();
+//                              document.cancelFullScreen(); // explicitly go out of fs.
+//                              alert("cancelled full screen");
+//                            break;
+//                            case 70: // f
+//                              enterFullscreen();
+//                            break;
+ //                           }
+//                            }, false);
+
+                        
+//                        jQuery(document).bind('mozfullscreenchange', function() {alert('mozfullscreenchange')});
+//                        jQuery(document).bind('fullscreenchange', function() {alert('fullscreenchange')});
+//                        jQuery(document).bind('webkitfullscreenchange', function() {alert('webkitfullscreenchange')});
+                        
+                        //jQuery(document).bind('webkitfullscreenchange mozfullscreenchange fullscreenchange',alert("hello"));
+                        
+                        //elem.height = document.height;
+                        //elem.width = document.width;
+                        });
+                    /*jQuery(dialog).resize(function doResize(evt) {
+                        console.log(evt);
+                        innerArea.childNodes[0].width = dialog.innerWidth;
+                        innerArea.childNodes[0].height = dialog.innerHeight;
+                    }, false);*/
                     return innerArea.get(0);
                 };
             evaluator.setImageProxy("/imageProxy");
