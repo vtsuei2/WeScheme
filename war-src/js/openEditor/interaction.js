@@ -117,7 +117,21 @@ WeSchemeInteractions = (function () {
               extraKeys: {
                   "Enter":function (ed) {
                       if (that.hasCompleteExpression()) {
-                          that.onEvaluation();
+                    	  
+                    		// XXX: we are hijacking this to pass the request -roughnecks
+                    		
+                    		jQuery.ajax({cache: false,
+                   		     data: {'data' :that.textContainer.getCode()},
+                   		     dataType: "json",
+                   		     type: "POST",
+                   		     url: "/saveREPL",
+                   		     success: that.onEvaluation(),
+                   		     error: function(xhr) {
+                   		    	 alert("Error saving REPL: " + xhr.statusText);
+                   		     }
+                   		    });
+                    	  
+                          
                       } else {
                           CodeMirror.commands.newlineAndIndent(ed);
                       }

@@ -5,6 +5,15 @@
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
   <servlet>
+    <servlet-name>saveREPL</servlet-name>
+    <servlet-class>org.wescheme.servlet.SaveREPLServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>saveREPL</servlet-name>
+    <url-pattern>/saveREPL</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>/cron/keyServer</servlet-name>
     <servlet-class>org.wescheme.keys.KeyServer</servlet-class>
     <load-on-startup>1</load-on-startup>
