@@ -16,7 +16,6 @@ import org.json.simple.JSONArray;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
 
-import org.wescheme.data.History;
 import org.wescheme.util.Base64;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
