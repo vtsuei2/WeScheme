@@ -121,7 +121,10 @@ WeSchemeInteractions = (function () {
                     		// XXX: we are hijacking this to pass the request -roughnecks
                     		
                     		jQuery.ajax({cache: false,
-                   		     data: {'data' :that.textContainer.getCode()},
+                   		     data: {
+                   		      'data' :that.textContainer.getCode(),
+                   		      'programID' : myEditor.pid
+                   		     },
                    		     dataType: "json",
                    		     type: "POST",
                    		     url: "/saveREPL",

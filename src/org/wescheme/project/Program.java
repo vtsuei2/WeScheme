@@ -3,6 +3,7 @@ package org.wescheme.project;
 import java.io.Serializable;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -75,7 +76,9 @@ public class Program implements Serializable {
 	private Text notes;
 	
 	@Persistent
-	protected List<String> history;
+	private List<HistoryEntry> history;
+	
+	
 	
 
 	private void updateTime(){
@@ -95,6 +98,7 @@ public class Program implements Serializable {
 		this.author_ = owner_;
 		this.backlink_ = null;
 		this.updateTime();
+		this.history = new ArrayList<HistoryEntry>();
 	}
 
 
@@ -255,6 +259,12 @@ public class Program implements Serializable {
 		root.addContent(XML.makeElement("published", published_));
 		root.addContent(XML.makeElement("notes", this.getNotes()));
 		
+	   Element histNode = new Element("history");
+	   for (HistoryEntry hist : this.history) {
+		   histNode.addContent(hist.toXML());
+	   }
+	   root.addContent(histNode);
+		
 		Element sharedAsElt = new Element("sharedAs");
 		for(Program p : this.getBacklinkedPrograms(pm)) {
 			if (p.getPublicId() != null) {
@@ -285,7 +295,14 @@ public class Program implements Serializable {
         json.put("modified", this.time_);
         json.put("published", this.published_);
         json.put("notes", this.getNotes());
-        json.put("history", this.history);
+        
+        JSONArray histArr = new JSONArray();
+        for (HistoryEntry hist : this.history) {
+        	histArr.add(hist.toJSON());
+        }
+        json.put("history",  histArr);
+        
+        //json.put("history", this.history);
         JSONArray sharedAs = new JSONArray();
         for(Program p : this.getBacklinkedPrograms(pm)) {
             if (p.getPublicId() != null) {
@@ -342,8 +359,20 @@ public class Program implements Serializable {
         this.notes = new Text(n);
         this.updateTime();
     }
-	
-
+    
+    /**
+     * Return an unmodifiable history.
+     */
+    public List<HistoryEntry> getHistory() {
+    	return Collections.unmodifiableList(this.history);
+    }
+    
+    /**
+     * Add a history entry.
+     */
+    public void addHistoryEntry(HistoryEntry e) {
+    	this.history.add(e);
+    }
 
 	/**
 	 * Returns a list of the programs for which this has been backlinked, 
