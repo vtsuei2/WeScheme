@@ -368,9 +368,12 @@ public class Program implements Serializable {
     }
     
     /**
-     * Add a history entry.
+     * Add a history entry. We drop the first entry if we exceed the limit of 100 entries.
      */
     public void addHistoryEntry(HistoryEntry e) {
+    	while (this.history.size() >= 100) {
+    		this.history.remove(0);
+    	}
     	this.history.add(e);
     }
 
