@@ -117,11 +117,7 @@ WeSchemeInteractions = (function () {
               makeTransparentIframe: true,
               extraKeys: {
                   "Enter":function (ed) {
-                      if (that.hasCompleteExpression()) {
-                    		that.onSubmit();
-                      } else {
-                          CodeMirror.commands.newlineAndIndent(ed);
-                      }
+                      that.onSubmit();
                   },
                   "Ctrl-N":function (ed) {
                       that.onHistoryNext();
@@ -136,7 +132,11 @@ WeSchemeInteractions = (function () {
                       that.onHistoryPrevious();
                   },
                   "Shift-Enter":function(ed) {
-                      that.onSubmit();
+                      if (that.hasCompleteExpression()) {
+                        	that.onSubmit();
+                      } else {
+                          CodeMirror.commands.newlineAndIndent(ed);
+                      }
                   }
               }},
             function(container) {
